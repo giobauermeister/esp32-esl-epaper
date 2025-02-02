@@ -1,4 +1,4 @@
-# ESP32 E-Paper ESL (Electornic Shelf Label) System (WIP)
+# ESP32 E-Paper ESL (Electronic Shelf Label) System (WIP)
 
 This is a basic ESL system that consists of:
 
