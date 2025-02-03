@@ -1,6 +1,7 @@
 set(SRC_FILES
     "main.c"
-    "epd_display/epd_display.c"  
+    "epd_display/epd_display.c"
+    "epd_display/epd_graphics.c"
 )
 
 set(REQ_COMPONENTS

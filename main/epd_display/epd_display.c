@@ -187,3 +187,35 @@ void epd_enable_power(void) {
     gpio_set_direction(LCD_GND_CTRL, GPIO_MODE_OUTPUT);
     gpio_set_level(LCD_GND_CTRL, 1);
 }
+
+/*******************************************************************
+ * Function Description: Updates the e-paper display with new image data.
+ * 
+ * Parameters:
+ *   *image - Pointer to the image buffer to be displayed
+ * 
+ * Returns: None
+ *******************************************************************/
+void epd_display(const uint8_t *image) {
+    uint16_t i, j, width_bytes, height;
+
+    width_bytes = (EPD_WIDTH % 8 == 0) ? (EPD_WIDTH / 8) : (EPD_WIDTH / 8 + 1);
+    height = EPD_HEIGHT;
+
+    // Write old image buffer
+    epd_write_reg(0x10);
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width_bytes; i++) {
+            epd_write_data8(oldImage[i + j * width_bytes]); // Send old frame buffer
+        }
+    }
+
+    // Write new image buffer
+    epd_write_reg(0x13);
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width_bytes; i++) {
+            epd_write_data8(image[i + j * width_bytes]);  // Send new frame buffer
+            oldImage[i + j * width_bytes] = image[i + j * width_bytes]; // Update oldImage[]
+        }
+    }
+}

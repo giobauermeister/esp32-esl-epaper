@@ -1,7 +1,7 @@
 #ifndef _EDP_DISPLAY_H
 #define _EDP_DISPLAY_H
 
-#include <stdio.h>
+#include <stdint.h>
 
 #define EPD_WIDTH  240
 #define EPD_HEIGHT  416
@@ -29,5 +29,6 @@ void epd_clear(void);
 void epd_test(void);
 void epd_deep_sleep(void);
 void epd_enable_power(void);
+void epd_display(const uint8_t *image);
 
 #endif // _EDP_DISPLAY_H
