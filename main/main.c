@@ -15,17 +15,17 @@ void app_main(void) {
     epd_set_buffer(fb, EPD_WIDTH, EPD_HEIGHT, 180, 1);
     epd_clear_buffer(WHITE);
 
-    epd_gpio_init();
     epd_spi_init();
 
+    epd_gpio_init();
     epd_enable_power();
-    vTaskDelay(pdMS_TO_TICKS(100));
 
-    epd_init();
-    // epd_clear();
-    // epd_update();
+    epd_fast_init();
+    epd_clear();
+    epd_update();
+    epd_part_init();
 
-    epd_show_string(0, 30, "Hello World!", 24, 1);
+    epd_show_string(0, 0, "Hello World!", 24, 1);
     epd_display(fb);
     epd_update();
 

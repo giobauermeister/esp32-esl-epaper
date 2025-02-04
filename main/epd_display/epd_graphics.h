@@ -25,5 +25,6 @@ void epd_clear_buffer(uint8_t color);
 void epd_draw_pixel(uint16_t x, uint16_t y, uint16_t color);
 void epd_show_char(uint16_t x, uint16_t y, uint16_t chr, uint16_t size, uint16_t color);
 void epd_show_string(uint16_t x, uint16_t y, const char *str, uint16_t size, uint16_t color);
+void epd_show_picture(uint16_t x, uint16_t y, uint16_t sizex, uint16_t sizey, const uint8_t BMP[], uint16_t color);
 
 #endif // _EPD_GRAPHICS_H

@@ -40,6 +40,7 @@ void epd_gpio_init(void) {
     gpio_set_direction(PIN_EPD_DC, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_EPD_RST, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_EPD_BUSY, GPIO_MODE_INPUT);
+    gpio_set_direction(LCD_GND_CTRL, GPIO_MODE_OUTPUT);
 }
 
 void epd_write_reg(uint8_t command) {
@@ -151,9 +152,6 @@ void epd_clear(void) {
         }
     }
 
-    epd_write_reg(0x20);  // Refresh Display
-    epd_wait_busy();
-
     ESP_LOGI(TAG_EPD, "Display Cleared");
 }
 
@@ -184,7 +182,6 @@ void epd_deep_sleep(void) {
 }
 
 void epd_enable_power(void) {
-    gpio_set_direction(LCD_GND_CTRL, GPIO_MODE_OUTPUT);
     gpio_set_level(LCD_GND_CTRL, 1);
 }
 

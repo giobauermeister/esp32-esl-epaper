@@ -36,7 +36,6 @@ void epd_set_buffer(uint8_t *buffer, uint16_t width, uint16_t height, uint16_t r
     }
 }
 
-
 /*******************************************************************
  * Function Description: Clears the image buffer.
  * 
@@ -73,7 +72,6 @@ void epd_draw_pixel(uint16_t x, uint16_t y, uint16_t color) {
     uint32_t addr;
     uint8_t pixel_data;
 
-    // Handle rotation
     switch (epd_buffer.rotation) {
         case 0:
             X = y;
@@ -81,27 +79,26 @@ void epd_draw_pixel(uint16_t x, uint16_t y, uint16_t color) {
             break;
         case 90:
             X = x;
-            Y = epd_buffer.height - y - 1;
+            Y = epd_buffer.height_memory - y - 1;
             break;
         case 180:
-            X = epd_buffer.width - y - 1;
-            Y = epd_buffer.height - x - 1;
+            X = epd_buffer.width_memory - y - 1;
+            Y = epd_buffer.height_memory - x - 1;
             break;
         case 270:
-            X = epd_buffer.width - x - 1;
+            X = epd_buffer.width_memory - x - 1;
             Y = y;
             break;
         default:
             return;
     }
 
-    // Calculate pixel position in the buffer
     addr = (X / 8) + (Y * epd_buffer.width_bytes);
     pixel_data = epd_buffer.buffer[addr];
 
-    if (color == 1) {  // Black pixel
+    if (color == 1) {
         epd_buffer.buffer[addr] = pixel_data & ~(0x80 >> (X % 8)); 
-    } else {  // White pixel
+    } else {
         epd_buffer.buffer[addr] = pixel_data | (0x80 >> (X % 8));  
     }
 }
@@ -191,3 +188,30 @@ void epd_show_string(uint16_t x, uint16_t y, const char *str, uint16_t size, uin
     }
 }
 
+void epd_show_picture(uint16_t x, uint16_t y, uint16_t sizex, uint16_t sizey, const uint8_t BMP[], uint16_t color) {
+    uint16_t j = 0, t;
+    uint16_t i, temp, y0;
+    uint16_t typeface_num = sizex * (sizey / 8 + ((sizey % 8) ? 1 : 0));
+
+    y0 = y;
+
+    for (i = 0; i < typeface_num; i++) {
+        temp = BMP[j];
+        for (t = 0; t < 8; t++) {
+            if (temp & 0x80) {
+                epd_draw_pixel(x, y, !color);
+            } else {
+                epd_draw_pixel(x, y, color);
+            }
+            y++;
+            temp <<= 1;
+        }
+
+        if ((y - y0) == sizey) {
+            y = y0;
+            x++;
+        }
+
+        j++;
+    }
+}
